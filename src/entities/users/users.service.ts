@@ -1,25 +1,38 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { hash } from 'bcrypt';
+import { Repository } from 'typeorm';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import usersRepository from './users.repository';
 
 @Injectable()
 export class UsersService {
+  constructor(
+    @InjectRepository(User)
+    private readonly _usersRepository: Repository<User>,
+  ) {}
+
   async create(createUserDto: CreateUserDto): Promise<User> {
-    return usersRepository.save(createUserDto);
+    const { password } = createUserDto;
+    const hashedPassword = await hash(password, 10);
+    return this._usersRepository.save({
+      ...createUserDto,
+      password: hashedPassword,
+    });
   }
 
   async findAll(): Promise<User[]> {
-    return usersRepository.find();
+    return this._usersRepository.find();
   }
 
   async findOne(id: number): Promise<User> {
-    return usersRepository.findOne({ where: { id } });
+    return this._usersRepository.findOne({ where: { id } });
   }
 
   async findOneByUsername(username: string): Promise<User> {
-    return usersRepository.findOne({ where: { username } });
+    return this._usersRepository.findOne({ where: { username } });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
@@ -27,6 +40,6 @@ export class UsersService {
   }
 
   async remove(id: number) {
-    return usersRepository.softDelete(id);
+    return this._usersRepository.softDelete(id);
   }
 }

@@ -1,7 +1,10 @@
+import { User } from 'src/entities/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -11,21 +14,38 @@ export class Auth {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  userId: number; // Посилання на ідентифікатор користувача
+  @ManyToOne(() => User, (user) => user.auth)
+  user: User;
 
   @Column()
-  accessToken: string; // JWT токен доступу
+  accessToken: string;
 
   @Column()
-  refreshToken: string; // Токен оновлення
+  refreshToken: string;
 
   @Column()
-  expiresIn: number; // Термін дії токенів (у секундах)
+  expiresIn: number;
 
   @CreateDateColumn()
-  createdAt: Date; // Дата та час створення запису
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date; // Дата та час оновлення запису
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
+
+  constructor({
+    id,
+    user,
+    accessToken,
+    refreshToken,
+    expiresIn,
+  }: Partial<Auth> = {}) {
+    this.id = id;
+    this.user = user;
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
+    this.expiresIn = expiresIn;
+  }
 }

@@ -1,3 +1,4 @@
+import { Auth } from 'src/entities';
 import {
   Entity,
   Column,
@@ -5,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'users', schema: 'public' })
@@ -29,4 +31,7 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt?: Date;
+
+  @OneToMany(() => Auth, (auth) => auth.user)
+  auth: Auth[];
 }
