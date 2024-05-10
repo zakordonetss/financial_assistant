@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compare } from 'bcrypt';
@@ -30,6 +34,15 @@ export class AuthService {
     const refreshToken = this._generateRefreshToken();
     await this._saveAuthData(user, accessToken, refreshToken);
     return { accessToken, refreshToken };
+  }
+
+  public async validateToken(token: string, secret: string): Promise<any> {
+    const decodedToken = this._jwtService.verify(token, { secret });
+    const userId = decodedToken.sub;
+
+    const user = await this._usersService.findOne(userId);
+    if (!user) throw new NotFoundException('User not found');
+    return user;
   }
 
   private async _validateUser(
