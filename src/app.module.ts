@@ -4,13 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DATABASE_CONFIG } from './configs/config';
 import { entities } from './entities';
+import { AccountsModule } from './entities/accounts/accounts.module';
 import { AuthModule } from './entities/auth/auth.module';
 import { UsersModule } from './entities/users/users.module';
-import { HttpExceptionFilter } from './filters/httpException.filter';
-import { TypeOrmExceptionFilter } from './filters/typeOrmException.filter';
-import { ValidationExceptionFilter } from './filters/validationException.filter';
+import { DATABASE_CONFIG } from './globals/configs/config';
+import { HttpExceptionFilter } from './globals/filters/httpException.filter';
+import { TypeOrmExceptionFilter } from './globals/filters/typeOrmException.filter';
+import { ValidationExceptionFilter } from './globals/filters/validationException.filter';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ValidationExceptionFilter } from './filters/validationException.filter'
       ...DATABASE_CONFIG,
       entities,
     }),
+    AccountsModule,
   ],
   controllers: [AppController],
   providers: [

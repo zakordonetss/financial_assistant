@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CLIENT_SECRET } from 'src/configs/config';
+import { CLIENT_SECRET } from 'src/globals/configs/config';
 
 import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';

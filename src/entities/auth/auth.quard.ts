@@ -5,8 +5,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { CLIENT_SECRET } from 'src/configs/config';
 import { AuthService } from 'src/entities/auth/auth.service';
+import { CLIENT_SECRET } from 'src/globals/configs/config';
+import { globalsService } from 'src/globals/services/globals.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -20,12 +21,10 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const decodedToken = await this._authService.validateToken(
-        token,
-        CLIENT_SECRET,
-      );
-      if (!decodedToken) throw new UnauthorizedException();
-      request['user'] = decodedToken;
+      const user = await this._authService.validateToken(token, CLIENT_SECRET);
+      if (!user) throw new UnauthorizedException();
+      request['user'] = user;
+      globalsService.user = user;
     } catch {
       throw new UnauthorizedException();
     }

@@ -1,4 +1,5 @@
 import { User } from 'src/entities/users/entities/user.entity';
+import { DB_TABLE_NAMES } from 'src/globals/configs/config';
 import {
   Column,
   CreateDateColumn,
@@ -9,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({ name: DB_TABLE_NAMES.auth })
 export class Auth {
   @PrimaryGeneratedColumn()
   id: number;

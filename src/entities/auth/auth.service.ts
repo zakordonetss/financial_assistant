@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compare } from 'bcrypt';
 import { randomBytes } from 'crypto';
-import { CLIENT_SECRET } from 'src/configs/config';
+import { CLIENT_SECRET } from 'src/globals/configs/config';
 import { Repository } from 'typeorm';
 
 import { User } from '../users/entities/user.entity';
@@ -36,7 +36,7 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  public async validateToken(token: string, secret: string): Promise<any> {
+  public async validateToken(token: string, secret: string): Promise<User> {
     const decodedToken = this._jwtService.verify(token, { secret });
     const userId = decodedToken.sub;
 

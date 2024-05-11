@@ -1,4 +1,6 @@
 import { Auth } from 'src/entities';
+import { Account } from 'src/entities';
+import { DB_TABLE_NAMES } from 'src/globals/configs/config';
 import {
   Entity,
   Column,
@@ -9,7 +11,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-@Entity({ name: 'users', schema: 'public' })
+@Entity({ name: DB_TABLE_NAMES.users })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -34,4 +36,7 @@ export class User {
 
   @OneToMany(() => Auth, (auth) => auth.user)
   auth: Auth[];
+
+  @OneToMany(() => Account, (account) => account.user)
+  account: Account[];
 }

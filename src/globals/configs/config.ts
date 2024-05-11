@@ -9,3 +9,9 @@ export const DATABASE_CONFIG: Record<string, string | number> = {
   password: '',
   database: 'financial_assistant',
 };
+
+export enum DB_TABLE_NAMES {
+  accounts = 'accounts',
+  users = 'users',
+  auth = 'auth',
+}
